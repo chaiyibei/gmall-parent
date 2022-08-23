@@ -8,13 +8,17 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class MybatisPlusConfig {
     /**
-     * 分页插件
+     *
      * @return
      */
+
+    //1、把MyBatisPlus的插件主体（总插件）放到容器
     @Bean
     public MybatisPlusInterceptor mybatisPlusInterceptor(){
+        //插件主体
         MybatisPlusInterceptor interceptor = new MybatisPlusInterceptor();
 
+        //加入内部的分页插件   码溢出以后，默认就访问最后一页即可
         PaginationInnerInterceptor paginationInnerInterceptor = new PaginationInnerInterceptor();
         paginationInnerInterceptor.setOverflow(true);
         interceptor.addInnerInterceptor(paginationInnerInterceptor);

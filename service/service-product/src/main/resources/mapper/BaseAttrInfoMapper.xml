@@ -16,17 +16,21 @@
         category_level
     </sql>
 
+    <!-- 自定义结果集 -->
     <resultMap id="AttrInfoAndValue"
-               type="com.atguigu.gmall.model.product.BaseAttrInfo">
+               type="com.atguigu.gmall.model.product.BaseAttrInfo"
+               autoMapping="true">
            <id property="id" column="id"/>
-           <result column="attr_name" property="attrName"/>
-           <result column="category_id" property="categoryId"/>
-           <result column="category_level" property="categoryLevel"/>
+<!--           <result column="attr_name" property="attrName"/>-->
+<!--           <result column="category_id" property="categoryId"/>-->
+<!--           <result column="category_level" property="categoryLevel"/>-->
            <collection property="attrValueList"
-                       ofType="com.atguigu.gmall.model.product.BaseAttrValue">
-                <id property="vid" column="id"/>
-                <result property="valueName" column="value_name"/>
-                <result property="attrId" column="attr_id"/>
+                       ofType="com.atguigu.gmall.model.product.BaseAttrValue"
+                       autoMapping="true">
+<!-- autoMapping: 数据库的列和JavaBean属性一一对应符合驼峰命名规则 -->
+                <id property="id" column="vid"/>
+<!--                <result property="valueName" column="value_name"/>-->
+<!--                <result property="attrId" column="attr_id"/>-->
            </collection>
     </resultMap>
 

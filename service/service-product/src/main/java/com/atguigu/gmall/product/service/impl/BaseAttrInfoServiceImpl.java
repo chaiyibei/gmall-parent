@@ -57,9 +57,14 @@ public class BaseAttrInfoServiceImpl extends ServiceImpl<BaseAttrInfoMapper, Bas
             }
         }
         if (vids.size() > 0){
-            int i = baseAttrValueMapper.delete(new LambdaQueryWrapper<BaseAttrValue>()
+            //部分删除
+            baseAttrValueMapper.delete(new LambdaQueryWrapper<BaseAttrValue>()
                     .eq(BaseAttrValue::getAttrId, info.getId())
                     .notIn(BaseAttrValue::getId, vids));
+        }else {
+            //全部删除
+            baseAttrValueMapper.delete(new LambdaQueryWrapper<BaseAttrValue>()
+                .eq(BaseAttrValue::getAttrId, info.getId()));
         }
 
         for (BaseAttrValue attrValue : attrValueList) {
