@@ -2,17 +2,12 @@ package com.atguigu.gmall.product.controller;
 
 import com.atguigu.gmall.common.result.Result;
 import io.minio.MinioClient;
-import io.minio.errors.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.xmlpull.v1.XmlPullParserException;
-
 import java.io.IOException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
@@ -54,11 +49,17 @@ public class FileUploadController {
             }else {
                 minioClient.makeBucket(bucketName);
             }
-            //
-            String filename = file.getOriginalFilename();
+            //获取上传文件的文件名
+            String filePath = file.getOriginalFilename();
+            //唯一文件名
+            String fileName = UUID.randomUUID().toString().replace("-","")
+                    + filePath.substring(filePath.lastIndexOf("."));
+
+            //填写Object完整路径
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
             //设置存储对象名称
-            String objectName = sdf.format(new Date()) + "/" + filename;
+            String objectName = sdf.format(new Date()) + "/" + fileName;
+
             //使用putObject上传一个文件到存储桶中
             minioClient.putObject(bucketName,objectName,file.getInputStream(),file.getContentType());
             log.info("文件上传成功");
@@ -79,7 +80,7 @@ public class FileUploadController {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return Result.fail();
+        return null;
     }
 }
 
