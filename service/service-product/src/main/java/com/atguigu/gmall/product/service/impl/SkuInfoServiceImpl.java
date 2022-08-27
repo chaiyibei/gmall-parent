@@ -115,8 +115,8 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoMapper, SkuInfo>
         // 商品（sku）的所有兄弟产品的销售属性名和值组合关系全部查出来，并封装成
         // {“118|120": "50","119|121": "50"}这样的json字符串
         Long spuId = skuInfo.getSpuId();
-        String valueSkuJson = spuSaleAttrService.getAllSkuValueJson(spuId);
-        skuDetailTo.setValueSkuJson(valueSkuJson);
+        String valueJson = spuSaleAttrService.getAllSkuSaleAttrValueJson(spuId);
+        skuDetailTo.setValueSkuJson(valueJson);
 
         //5、商品（sku）类似推荐
         //6、商品（sku）介绍[所属的spu的海报] sku_poster（×）

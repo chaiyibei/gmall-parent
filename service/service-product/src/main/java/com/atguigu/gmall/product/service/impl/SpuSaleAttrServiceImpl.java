@@ -37,7 +37,7 @@ public class SpuSaleAttrServiceImpl extends ServiceImpl<SpuSaleAttrMapper, SpuSa
     }
 
     @Override
-    public String getAllSkuValueJson(Long spuId) {
+    public String getAllSkuSaleAttrValueJson(Long spuId) {
         List<ValueSkuJsonTo> valueSkuJsonTos = spuSaleAttrMapper.getAllSkuValueJson(spuId);
         Map<String,Long> map = new HashMap<>();
         for (ValueSkuJsonTo valueSkuJsonTo : valueSkuJsonTos) {
@@ -47,6 +47,7 @@ public class SpuSaleAttrServiceImpl extends ServiceImpl<SpuSaleAttrMapper, SpuSa
         }
         //springboot: jackson
         String json = Jsons.toStr(map);
+
         return json;
     }
 }

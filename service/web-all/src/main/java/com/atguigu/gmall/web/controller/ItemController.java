@@ -38,7 +38,7 @@ public class ItemController {
             model.addAttribute("skuInfo",skuDetailTo.getSkuInfo());
             model.addAttribute("price",skuDetailTo.getPrice());
             model.addAttribute("spuSaleAttrList",skuDetailTo.getSpuSaleAttrList());
-            model.addAttribute("valueSkuJson",skuDetailTo.getValueSkuJson());
+            model.addAttribute("valuesSkuJson",skuDetailTo.getValueSkuJson()); //注意values和value
         }
         return "item/index";
     }
