@@ -1,6 +1,7 @@
 package com.atguigu.gmall.product.controller;
 
 import com.atguigu.gmall.common.result.Result;
+import com.atguigu.gmall.product.service.FileUploadService;
 import io.minio.MinioClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,10 +17,8 @@ import java.util.UUID;
 @RequestMapping("/admin/product")
 @RestController
 public class FileUploadController {
-    @Value("${minio.bucketName}")
-    private String bucketName;
     @Autowired
-    private MinioClient minioClient;
+    FileUploadService fileUploadService;
 
     /**
      * 文件上传功能
@@ -39,47 +38,13 @@ public class FileUploadController {
      * @return
      */
     @PostMapping("/fileUpload")
-    public Result fileUpload(@RequestPart("file")MultipartFile file) throws IOException {
-        log.info("开始处理文件上传，文件名是{}",file.getOriginalFilename());
-
-        try {
-            boolean exists = minioClient.bucketExists(bucketName);
-            if (exists){
-                log.info("存储桶已经存在！");
-            }else {
-                minioClient.makeBucket(bucketName);
-            }
-            //获取上传文件的文件名
-            String filePath = file.getOriginalFilename();
-            //唯一文件名
-            String fileName = UUID.randomUUID().toString().replace("-","")
-                    + filePath.substring(filePath.lastIndexOf("."));
-
-            //填写Object完整路径
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
-            //设置存储对象名称
-            String objectName = sdf.format(new Date()) + "/" + fileName;
-
-            //使用putObject上传一个文件到存储桶中
-            minioClient.putObject(bucketName,objectName,file.getInputStream(),file.getContentType());
-            log.info("文件上传成功");
-            //拼接将要返回的字符串
-            String url = "http:192.168.6.100:9000" + "/" + bucketName + "/" + objectName;
-            return Result.ok(url);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return Result.fail(null);
-        }
+    public Result fileUpload(@RequestPart("file")MultipartFile file) throws Exception {
+       String url = fileUploadService.upload(file);
+       return Result.ok(url);
     }
 
     @DeleteMapping("/fileDelete")
     public Result fileDelete(@RequestPart("objectName")String objectName){
-        try {
-            minioClient.removeObject(bucketName,objectName);
-            return Result.ok();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
         return null;
     }
 }

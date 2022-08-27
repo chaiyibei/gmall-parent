@@ -14,6 +14,7 @@ import com.atguigu.gmall.product.service.SpuInfoService;
 import com.atguigu.gmall.product.mapper.SpuInfoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.util.List;
@@ -35,6 +36,7 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoMapper, SpuInfo>
     @Autowired
     SpuSaleAttrValueMapper spuSaleAttrValueMapper;
 
+    @Transactional
     @Override
     public void saveSpuInfo(SpuInfo spuInfo) {
         //1、保存到spu_info

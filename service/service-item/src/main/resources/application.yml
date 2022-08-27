@@ -1,0 +1,14 @@
+server:
+  port: 9000
+
+spring:
+  #配置链路追踪
+  zipkin:
+    base-url: http://192.168.6.100:9411/
+    sender:
+      type: web
+
+  autoconfigure:
+    exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+
+

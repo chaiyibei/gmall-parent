@@ -1,10 +1,12 @@
 package com.atguigu.gmall.product.controller;
 
 import com.atguigu.gmall.common.result.Result;
+import com.atguigu.gmall.model.product.BaseSaleAttr;
 import com.atguigu.gmall.model.product.BaseTrademark;
 import com.atguigu.gmall.model.product.SpuInfo;
 import com.atguigu.gmall.model.product.SpuSaleAttr;
 import com.atguigu.gmall.product.mapper.SpuSaleAttrMapper;
+import com.atguigu.gmall.product.service.BaseSaleAttrService;
 import com.atguigu.gmall.product.service.SpuInfoService;
 import com.atguigu.gmall.product.service.SpuSaleAttrService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -21,6 +23,8 @@ import java.util.List;
 @RestController
 public class BaseSaleAttrController {
     @Autowired
+    BaseSaleAttrService baseSaleAttrService;
+    @Autowired
     SpuSaleAttrService spuSaleAttrService;
 
     /**
@@ -29,7 +33,23 @@ public class BaseSaleAttrController {
      */
     @GetMapping("/baseSaleAttrList")
     public Result getBaseSaleAttrList(){
-        List<SpuSaleAttr> spuSaleAttrList = spuSaleAttrService.list();
-        return Result.ok(spuSaleAttrList);
+        List<BaseSaleAttr> list = baseSaleAttrService.list();
+        return Result.ok(list);
+    }
+
+    /**
+     * 根据spuId获取销售属性
+     * @param spuId
+     * @return
+     */
+    @GetMapping("/spuSaleAttrList/{spuId}")
+    public Result getSpuSaleAttrList(@PathVariable("spuId")Long spuId){
+        List<SpuSaleAttr> list = spuSaleAttrService.getSaleAttrAndValueBySpuId(spuId);
+        return Result.ok(list);
     }
 }
+
+
+
+
+
