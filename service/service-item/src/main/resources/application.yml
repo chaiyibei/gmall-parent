@@ -10,5 +10,20 @@ spring:
 
   autoconfigure:
     exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+  redis:
+    host: 192.168.6.100
+    password: chai123456
 
+app:
+  thread-pool:
+    core: 4
+    max: 8
+    queue-size: 20
+    keep-alive-time: 300 #秒为单位
 
+#暴露所有监控端点
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
