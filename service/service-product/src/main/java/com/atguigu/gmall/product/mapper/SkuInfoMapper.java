@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * @author 柴小贝
@@ -18,6 +19,13 @@ public interface SkuInfoMapper extends BaseMapper<SkuInfo> {
                       @Param("sale") int sale);
 
     BigDecimal getPrice(@Param("skuId") Long skuId);
+
+    /**
+     * 查询所有的SkuId
+     * @return
+     */
+    List<Long> getAllSkuId();
+
 }
 
 
