@@ -1,4 +1,4 @@
-package com.atguigu.gmall.common.util;
+package com.atguigu.starter.cache.utils;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;

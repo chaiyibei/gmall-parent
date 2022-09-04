@@ -1,4 +1,4 @@
-package com.atguigu.gmall.common.constant;
+package com.atguigu.starter.cache.constant;
 
 public class SysRedisConst {
 
@@ -14,5 +14,7 @@ public class SysRedisConst {
 
     public static final String BLOOM_SKUID = "bloom:skuid";
 
-//    public static final String CACHE_CATEGORYS = "categorys";
+    public static final String CACHE_CATEGORYS = "categorys";
+
+    public static final String LOCK_PREFIX = "lock:";
 }

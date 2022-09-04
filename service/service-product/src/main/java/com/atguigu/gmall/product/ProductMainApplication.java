@@ -9,7 +9,8 @@ import org.springframework.cloud.client.SpringCloudApplication;
 import org.springframework.context.annotation.Import;
 
 @EnableThreadPool
-@Import({Swagger2Config.class, RedissonAutoConfiguration.class})
+//@Import({Swagger2Config.class, RedissonAutoConfiguration.class})
+@Import(Swagger2Config.class)
 @MapperScan("com.atguigu.gmall.product.mapper")
 @SpringCloudApplication
 public class ProductMainApplication {
