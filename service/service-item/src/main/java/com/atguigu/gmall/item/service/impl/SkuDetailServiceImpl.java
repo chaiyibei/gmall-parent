@@ -2,8 +2,7 @@ package com.atguigu.gmall.item.service.impl;
 
 import com.atguigu.gmall.common.constant.SysRedisConst;
 import com.atguigu.gmall.common.result.Result;
-import com.atguigu.gmall.common.util.Jsons;
-import com.atguigu.gmall.item.feign.SkuDetailFeignClient;
+import com.atguigu.gmall.feign.product.SkuProductFeignClient;
 import com.atguigu.gmall.item.service.SkuDetailService;
 import com.atguigu.gmall.model.product.SkuImage;
 import com.atguigu.gmall.model.product.SkuInfo;
@@ -12,6 +11,7 @@ import com.atguigu.gmall.model.to.CategoryViewTo;
 import com.atguigu.gmall.model.to.SkuDetailTo;
 import com.atguigu.starter.cache.annotation.GmallCache;
 import com.atguigu.starter.cache.service.CacheOpsService;
+import com.atguigu.starter.cache.utils.Jsons;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -31,7 +31,7 @@ import java.util.concurrent.locks.ReentrantLock;
 @Service
 public class SkuDetailServiceImpl implements SkuDetailService {
     @Autowired
-    SkuDetailFeignClient skuDetailFeignClient;
+    SkuProductFeignClient skuProductFeignClient;
 
     /**
      * 可配置的线程池，可自动注入
@@ -88,7 +88,7 @@ public class SkuDetailServiceImpl implements SkuDetailService {
 
         //1、查基本信息
         CompletableFuture<SkuInfo> skuInfoFuture = CompletableFuture.supplyAsync(() -> {
-            Result<SkuInfo> result = skuDetailFeignClient.getSkuInfo(skuId);
+            Result<SkuInfo> result = skuProductFeignClient.getSkuInfo(skuId);
             SkuInfo skuInfo = result.getData();
             skuDetailTo.setSkuInfo(skuInfo);
             return skuInfo;
@@ -97,21 +97,21 @@ public class SkuDetailServiceImpl implements SkuDetailService {
         //2、查商品图片信息
         CompletableFuture<Void> imageFuture = skuInfoFuture.thenAcceptAsync(skuInfo -> {
             if (skuInfo != null){
-                Result<List<SkuImage>> skuImages = skuDetailFeignClient.getSkuImages(skuId);
+                Result<List<SkuImage>> skuImages = skuProductFeignClient.getSkuImages(skuId);
                 skuInfo.setSkuImageList(skuImages.getData());
             }
         }, executor);
 
         //3、查商品实时价格
         CompletableFuture<Void> priceFuture = CompletableFuture.runAsync(() -> {
-            Result<BigDecimal> price = skuDetailFeignClient.getSku1010Price(skuId);
+            Result<BigDecimal> price = skuProductFeignClient.getSku1010Price(skuId);
             skuDetailTo.setPrice(price.getData());
         }, executor);
 
         //4、查销售属性名值
         CompletableFuture<Void> saleAttrFuture = skuInfoFuture.thenAcceptAsync(skuInfo -> {
             if (skuInfo != null) {
-                Result<List<SpuSaleAttr>> saleAttrValues = skuDetailFeignClient
+                Result<List<SpuSaleAttr>> saleAttrValues = skuProductFeignClient
                         .getSkuSaleAttrValues(skuId, skuInfo.getSpuId());
                 skuDetailTo.setSpuSaleAttrList(saleAttrValues.getData());
             }
@@ -120,7 +120,7 @@ public class SkuDetailServiceImpl implements SkuDetailService {
         //5、查sku组合
         CompletableFuture<Void> skuVlaueFuture = skuInfoFuture.thenAcceptAsync(skuInfo -> {
             if (skuInfo != null){
-                Result<String> skuValueJson = skuDetailFeignClient.getSkuValueJson(skuInfo.getSpuId());
+                Result<String> skuValueJson = skuProductFeignClient.getSkuValueJson(skuInfo.getSpuId());
                 skuDetailTo.setValueSkuJson(skuValueJson.getData());
             }
         }, executor);
@@ -128,7 +128,7 @@ public class SkuDetailServiceImpl implements SkuDetailService {
         //6、查分类
         CompletableFuture<Void> categoryFuture = skuInfoFuture.thenAcceptAsync(skuInfo -> {
             if (skuInfo != null){
-                Result<CategoryViewTo> categoryView = skuDetailFeignClient.getCategoryView(skuInfo.getCategory3Id());
+                Result<CategoryViewTo> categoryView = skuProductFeignClient.getCategoryView(skuInfo.getCategory3Id());
                 skuDetailTo.setCategoryView(categoryView.getData());
             }
         },executor);

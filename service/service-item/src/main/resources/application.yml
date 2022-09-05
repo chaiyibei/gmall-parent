@@ -2,17 +2,19 @@ server:
   port: 9000
 
 spring:
+  main:
+    allow-bean-definition-overriding: true
   #配置链路追踪
-  zipkin:
-    base-url: http://192.168.6.100:9411/
-    sender:
-      type: web
+#  zipkin:
+#    base-url: http://192.168.6.100:9411/
+#    sender:
+#      type: web
 
   autoconfigure:
     exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
-  redis:
-    host: 192.168.6.100
-    password: chai123456
+#  redis:
+#    host: 192.168.6.100
+#    password: chai123456
 
 app:
   thread-pool:
