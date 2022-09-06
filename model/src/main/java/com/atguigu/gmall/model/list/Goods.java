@@ -29,7 +29,9 @@ public class Goods {
     private Double price;
 
     //  @Field(type = FieldType.Date)   6.8.1
-    @Field(type = FieldType.Date,format = DateFormat.custom,pattern = "yyyy-MM-dd HH:mm:ss")
+    @Field(type = FieldType.Date,
+            format = DateFormat.custom,
+            pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createTime; // 新品
 
     @Field(type = FieldType.Long)
