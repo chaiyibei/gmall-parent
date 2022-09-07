@@ -1,5 +1,6 @@
 package com.atguigu.gmall.user.controller;
 
+import com.atguigu.gmall.common.constant.SysRedisConst;
 import com.atguigu.gmall.common.result.Result;
 import com.atguigu.gmall.common.result.ResultCodeEnum;
 import com.atguigu.gmall.model.user.UserInfo;
@@ -34,6 +35,7 @@ public class UserController {
 
     /**
      * 退出登录
+     * @RequestHeader(SysRedisConst.USERID_HEADER) String uid
      * @return
      */
     @GetMapping("/passport/logout")

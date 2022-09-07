@@ -17,4 +17,6 @@ public class SysRedisConst {
     public static final String CACHE_CATEGORYS = "categorys";
 
     public static final String LOGIN_USER = "user:login:"; //拼接token
+
+    public static final String USERID_HEADER = "userid";
 }

@@ -51,4 +51,4 @@ app:
     deny-url:
       - /api/inner/**
 
-    login-page: http://
+    login-page: http://passport.gmall.com/login.html
