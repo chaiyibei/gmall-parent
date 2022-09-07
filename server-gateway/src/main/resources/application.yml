@@ -26,7 +26,29 @@ spring:
           predicates:
             - Path=/admin/product/**
 
+        - id: service-user
+          uri: lb://service-user
+          predicates:
+            - Path=/api/user/**
+
         - id: web-all
           uri: lb://web-all
           predicates:
             - Host=**.gmall.com
+
+app:
+  auth:
+    no-auth-url:  #无需登录就能访问的路径
+      - /css/**
+      - /js/**
+      - /img/**
+      - /login.html
+      - /api/user/passport/login
+
+    login-auth-url:
+      - /order/**
+
+    deny-url:
+      - /api/inner/**
+
+    login-page: http://
