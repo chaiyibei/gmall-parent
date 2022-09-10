@@ -11,6 +11,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 @FeignClient("service-cart")
 public interface CartFeignClient {
     @GetMapping("/addToCart")
-    public Result<SkuInfo> addToCart(@RequestParam("skuId") Long skuId,
+    Result<SkuInfo> addToCart(@RequestParam("skuId") Long skuId,
                                      @RequestParam("num") Integer num);
 }

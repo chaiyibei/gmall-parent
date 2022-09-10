@@ -3,6 +3,7 @@ package com.atguigu.gmall.item.service.impl;
 import com.atguigu.gmall.common.constant.SysRedisConst;
 import com.atguigu.gmall.common.result.Result;
 import com.atguigu.gmall.feign.product.SkuProductFeignClient;
+import com.atguigu.gmall.feign.search.SearchFeignClient;
 import com.atguigu.gmall.item.service.SkuDetailService;
 import com.atguigu.gmall.model.product.SkuImage;
 import com.atguigu.gmall.model.product.SkuInfo;
@@ -57,6 +58,9 @@ public class SkuDetailServiceImpl implements SkuDetailService {
     @Autowired
     CacheOpsService cacheOpsService;
 
+    @Autowired
+    SearchFeignClient searchFeignClient;
+
     /**
      * 表达式中的params代表方法的所有参数列表
      * @param skuId
@@ -74,6 +78,15 @@ public class SkuDetailServiceImpl implements SkuDetailService {
     public SkuDetailTo getSkuDetail(Long skuId) {
         SkuDetailTo fromRpc = getSkuDetailFromRpc(skuId);
         return fromRpc;
+    }
+
+    @Override
+    public void updateHotScore(Long skuId) {
+        Long increment = redisTemplate.opsForValue()
+                .increment(SysRedisConst.SKU_HOTSCORE_PREFIX + skuId);
+        if (increment % 100 == 0){
+            searchFeignClient.updateHotScore(skuId,increment);
+        }
     }
 
     //未缓存优化前

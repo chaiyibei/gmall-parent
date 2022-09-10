@@ -6,8 +6,11 @@ import com.atguigu.gmall.common.config.Swagger2Config;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.cloud.client.SpringCloudApplication;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Import;
-
+@EnableFeignClients(basePackages = {
+        "com.atguigu.gmall.feign.search"
+})
 @EnableThreadPool
 //@Import({Swagger2Config.class, RedissonAutoConfiguration.class})
 @Import(Swagger2Config.class)

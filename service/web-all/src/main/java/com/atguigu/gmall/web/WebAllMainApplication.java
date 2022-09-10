@@ -22,6 +22,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 @EnableFeignClients(basePackages = {
         "com.atguigu.gmall.feign.item",
         "com.atguigu.gmall.feign.product",
+        "com.atguigu.gmall.feign.search",
         "com.atguigu.gmall.feign.cart"
 })
 public class WebAllMainApplication {

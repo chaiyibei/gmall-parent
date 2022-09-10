@@ -154,6 +154,7 @@ public class GlobalAuthFilter implements GlobalFilter {
 
     /**
      * 用户id透传
+     * 再看看前端有没有带临时id，如果带了也需要透传
      * @param userInfo
      * @param exchange
      */
@@ -162,10 +163,13 @@ public class GlobalAuthFilter implements GlobalFilter {
             //请求一旦发来，所有的请求数据都是固定的，只能读不能改
             ServerHttpRequest request = exchange.getRequest();
 
+            //获取前段带来的临时id
+            String userTempId = getUserTempId(exchange);
             //根据原来的请求，封装一个请求
             ServerHttpRequest newRequest = exchange.getRequest()
                     .mutate()
                     .header(SysRedisConst.USERID_HEADER, userInfo.getId().toString())
+                    .header(SysRedisConst.USERTEMPID_HEADER,userTempId)
                     .build();
 
             //放行的时候传改掉的exchange
@@ -178,6 +182,16 @@ public class GlobalAuthFilter implements GlobalFilter {
 //            request.getHeaders().add(SysRedisConst.USERID_HEADER,userInfo.getId().toString());
         }
         return exchange;
+    }
+
+    /**
+     * 获取临时id
+     * @param exchange
+     * @return
+     */
+    private String getUserTempId(ServerWebExchange exchange) {
+
+        return null;
     }
 
     /**
