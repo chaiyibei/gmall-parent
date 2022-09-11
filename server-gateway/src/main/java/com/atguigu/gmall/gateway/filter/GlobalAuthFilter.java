@@ -27,6 +27,7 @@ import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 /**
  * Webflux：响应式web编程【消息队列分布式】
@@ -100,7 +101,7 @@ public class GlobalAuthFilter implements GlobalFilter {
                 //3.3、判断用户信息是否正确
                 if (userInfo != null){
                     //redis中有此用户
-                    ServerWebExchange webExchange = userIdTransport(userInfo, exchange);
+                    ServerWebExchange webExchange = userIdOrTempIdTransport(userInfo, exchange);
                     return chain.filter(webExchange);
                 }else {
                     //redis中无此用户【假令牌、token没有，没登录】
@@ -116,16 +117,15 @@ public class GlobalAuthFilter implements GlobalFilter {
         //普通请求只要带了token，说明可能登录了。只要登录了，就透传用户id
         String tokenValue = getTokenValue(exchange);
         UserInfo userInfo = getTokenUserInfo(tokenValue);
-        if (userInfo != null){
-            exchange = userIdTransport(userInfo, exchange);
-        }else {
-            //带了token，但是是假令牌
-            if (!StringUtils.isEmpty(tokenValue)){
-                //重定向到登录页
-                return redirectToCustomPage(urlProperties.getLoginPage()+"?originUrl="+uri
-                        ,exchange);
-            }
+        if (!StringUtils.isEmpty(tokenValue) && userInfo == null){
+            //假请求直接打回登录
+            return redirectToCustomPage(urlProperties.getLoginPage()+"?originUrl="+uri
+                    ,exchange);
         }
+
+        //普通请求，透传用户id或者临时id
+        exchange = userIdOrTempIdTransport(userInfo, exchange);
+
         return chain.filter(exchange);
 
         //4、对登录后的请求进行 user_id 透传
@@ -158,30 +158,28 @@ public class GlobalAuthFilter implements GlobalFilter {
      * @param userInfo
      * @param exchange
      */
-    private ServerWebExchange userIdTransport(UserInfo userInfo, ServerWebExchange exchange) {
-        if (userInfo != null){
-            //请求一旦发来，所有的请求数据都是固定的，只能读不能改
-            ServerHttpRequest request = exchange.getRequest();
+    private ServerWebExchange userIdOrTempIdTransport(UserInfo userInfo, ServerWebExchange exchange) {
+        //请求一旦发来，所有的请求数据都是固定的，只能读不能改
+        ServerHttpRequest request = exchange.getRequest();
+        ServerHttpRequest.Builder newReqbuilder = exchange.getRequest().mutate();
 
-            //获取前段带来的临时id
-            String userTempId = getUserTempId(exchange);
-            //根据原来的请求，封装一个请求
-            ServerHttpRequest newRequest = exchange.getRequest()
-                    .mutate()
-                    .header(SysRedisConst.USERID_HEADER, userInfo.getId().toString())
-                    .header(SysRedisConst.USERTEMPID_HEADER,userTempId)
-                    .build();
+        //用户登录了
+        if (userInfo != null) {
+            newReqbuilder.header(SysRedisConst.USERID_HEADER,userInfo.getId().toString());
+        }
+        //用户没登录
+        String userTempId = getUserTempId(exchange);
+        newReqbuilder.header(SysRedisConst.USERTEMPID_HEADER,userTempId);
 
-            //放行的时候传改掉的exchange
-            ServerWebExchange webExchange = exchange.mutate()
-                    .request(newRequest)
-                    .response(exchange.getResponse())
-                    .build();
-            return webExchange;
+        //放行的时候传改掉的exchange
+        ServerWebExchange webExchange = exchange
+                .mutate()
+                .request(newReqbuilder.build())
+                .response(exchange.getResponse())
+                .build();
+        return webExchange;
 
 //            request.getHeaders().add(SysRedisConst.USERID_HEADER,userInfo.getId().toString());
-        }
-        return exchange;
     }
 
     /**
@@ -190,8 +188,18 @@ public class GlobalAuthFilter implements GlobalFilter {
      * @return
      */
     private String getUserTempId(ServerWebExchange exchange) {
+        ServerHttpRequest request = exchange.getRequest();
+        //1、尝试获取头中的临时id
+        String tempId = request.getHeaders().getFirst("userTempId");
+        //2、如果头中没有，尝试获取cookie中的值
+        if (StringUtils.isEmpty(tempId)){
+            HttpCookie httpCookie = request.getCookies().getFirst("userTempId");
+            if (httpCookie != null){
+                tempId = httpCookie.getValue();
+            }
+        }
 
-        return null;
+        return tempId;
     }
 
     /**

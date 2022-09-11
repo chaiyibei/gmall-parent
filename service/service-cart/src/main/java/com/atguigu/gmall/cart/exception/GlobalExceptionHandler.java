@@ -2,6 +2,7 @@ package com.atguigu.gmall.cart.exception;
 
 import com.atguigu.gmall.common.execption.GmallException;
 import com.atguigu.gmall.common.result.Result;
+import com.atguigu.gmall.common.result.ResultCodeEnum;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -21,7 +22,9 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(GmallException.class)
     public Result handleGmallException(GmallException gmallException){
-
-        return Result.ok(); //给前端的返回
+        //业务状态的枚举类
+        ResultCodeEnum codeEnum = gmallException.getCodeEnum();
+        Result<String> result = Result.build("", codeEnum);
+        return result; //给前端的返回
     }
 }

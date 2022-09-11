@@ -10,7 +10,20 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequestMapping("/api/inner/rpc/cart")
 @FeignClient("service-cart")
 public interface CartFeignClient {
+    /**
+     * 把商品添加到购物车
+     * @param skuId
+     * @param num
+     * @return
+     */
     @GetMapping("/addToCart")
-    Result<SkuInfo> addToCart(@RequestParam("skuId") Long skuId,
+    Result<Object> addToCart(@RequestParam("skuId") Long skuId,
                                      @RequestParam("num") Integer num);
+
+    /**
+     * 删除购物车中选中的商品
+     * @return
+     */
+    @GetMapping("/deleteChecked")
+    Result deleteChecked();
 }

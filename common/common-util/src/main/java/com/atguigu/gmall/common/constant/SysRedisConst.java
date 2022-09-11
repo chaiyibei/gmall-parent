@@ -25,4 +25,8 @@ public class SysRedisConst {
     public static final int SEARCH_PAGE_SIZE = 8;
 
     public static final String SKU_HOTSCORE_PREFIX = "sku:hotscore:"; //
+
+    public static final String CART_KEY = "cart:user:"; //用户id或临时id
+
+    public static final long CART_ITEMS_LIMIT = 200;
 }
