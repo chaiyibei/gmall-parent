@@ -28,4 +28,8 @@ public class OrderStatusLog extends BaseEntity {
    @TableField("operate_time")
    private Date operateTime;
 
+   //
+   @ApiModelProperty(value = "用户id")
+   @TableField("user_id")
+   private Long userId;
 }
