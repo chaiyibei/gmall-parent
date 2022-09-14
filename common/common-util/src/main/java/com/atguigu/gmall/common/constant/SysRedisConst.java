@@ -1,5 +1,7 @@
 package com.atguigu.gmall.common.constant;
 
+import java.util.Date;
+
 public class SysRedisConst {
 
     public static final String NULL_VAL = "x";
@@ -29,4 +31,10 @@ public class SysRedisConst {
     public static final String CART_KEY = "cart:user:"; //用户id或临时id
 
     public static final long CART_ITEMS_LIMIT = 200;
+
+    public static final String ORDER_TEMP_TOKEN = "order:temptoken:";
+
+    public static final Integer ORDER_CLOSE_TTL = 60*45; //秒为单位
+
+    public static final Integer ORDER_REFUND_TTL = 60*60*24*30; //秒为单位
 }

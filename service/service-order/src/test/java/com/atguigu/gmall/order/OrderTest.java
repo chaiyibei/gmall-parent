@@ -18,7 +18,7 @@ public class OrderTest {
     /*
         雪花算法：
             1bit(不用) + 41bit(时间戳) + 10bit(工作机器id) + 12bit(序列号)
-            = 64bit = 8kb -> Long
+            = 64bit = 8byte -> Long
      */
 
     @Test

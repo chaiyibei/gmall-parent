@@ -19,7 +19,7 @@ public class IndexController {
      * 跳到首页
      * @return
      */
-    @GetMapping({"/", "/index"})
+    @GetMapping({"/", "/index","/index.html"})
     public String indexPage(Model model){
         Result<List<CategoryTreeTo>> result = categoryFeignClient.getAllCategoryWithTree();
         if (result.isOk()){

@@ -135,7 +135,8 @@ public class CartServiceImpl implements CartService {
         executor.submit(()->{
             //2、绑订请求到这个线程
             RequestContextHolder.setRequestAttributes(attributes);
-            updateCartAllItemsPrice(cartKey,infos);
+//            updateCartAllItemsPrice(cartKey,infos);
+            updateCartAllItemsPrice(cartKey);
             //3、移除数据
             RequestContextHolder.resetRequestAttributes();
         });
@@ -229,21 +230,35 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public void updateCartAllItemsPrice(String cartKey, List<CartInfo> cartInfos) {
+//    public void updateCartAllItemsPrice(String cartKey, List<CartInfo> cartInfos) {
+    public void updateCartAllItemsPrice(String cartKey) {
         BoundHashOperations<String, String, String> ops = redisTemplate.boundHashOps(cartKey);
 
         System.out.println("更新价格开始：" + Thread.currentThread());
+        ops.values().stream()
+                        .map(str-> Jsons.toObj(str,CartInfo.class))
+                        .forEach(cartInfo -> {
+                            //1、查出最新价格
+                            Result<BigDecimal> price = skuProductFeignClient.getSku1010Price(cartInfo.getSkuId());
+                            //2、更新价格
+                            cartInfo.setSkuPrice(price.getData());
+                            cartInfo.setUpdateTime(new Date());
+                            //3、更新购物车价格  给购物车存数据之前在做一个校验
+                            if (ops.hasKey(cartInfo.getSkuId().toString())){
+                                ops.put(cartInfo.getSkuId().toString(),Jsons.toStr(cartInfo));
+                            }
+                        });
         //stream 不是默认并发，默认串行。   并发：.parallel()
-        cartInfos.stream()
-                .forEach(cartInfo -> {
-                    //1、查出最新价格
-                    Result<BigDecimal> price = skuProductFeignClient.getSku1010Price(cartInfo.getSkuId());
-                    //2、更新价格
-                    cartInfo.setSkuPrice(price.getData());
-                    cartInfo.setUpdateTime(new Date());
-                    //3、更新购物车价格
-                    ops.put(cartInfo.getSkuId().toString(),Jsons.toStr(cartInfo));
-                });
+//        cartInfos.stream()
+//                .forEach(cartInfo -> {
+//                    //1、查出最新价格
+//                    Result<BigDecimal> price = skuProductFeignClient.getSku1010Price(cartInfo.getSkuId());
+//                    //2、更新价格
+//                    cartInfo.setSkuPrice(price.getData());
+//                    cartInfo.setUpdateTime(new Date());
+//                    //3、更新购物车价格
+//                    ops.put(cartInfo.getSkuId().toString(),Jsons.toStr(cartInfo));
+//                });
         System.out.println("更新价格结束：" + Thread.currentThread());
     }
 

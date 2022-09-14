@@ -10,3 +10,22 @@ spring:
     username: root
     password: 123456
     type: com.zaxxer.hikari.HikariDataSource
+  main:
+    allow-bean-definition-overriding: true
+
+  rabbitmq:
+    username: admin
+    password: admin
+    host: 192.168.6.100
+    port: 5672
+    virtual-host: /
+    publisher-returns: true #发布者返回（消息成功标志）
+    publisher-confirm-type: simple #开启消息简单确认机制
+    listener:
+      type: simple
+      simple:
+        acknowledge-mode: manual
+        batch-size: 12
+
+app:
+  ware-url: http://localhost:9001/
