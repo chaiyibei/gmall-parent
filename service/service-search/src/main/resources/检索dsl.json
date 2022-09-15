@@ -1,0 +1,64 @@
+{
+  "query": {
+    "bool": {
+      "must": [
+        {
+          "term": {
+            "category3Id": {
+              "value": "61"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "aggs": {
+    "tmIdAgg": {
+      "terms": {
+        "field": "tmId",
+        "size": 1000
+      },
+      "aggs": {
+        "tmNameAgg": {
+          "terms": {
+            "field": "tmName",
+            "size": 1000
+          }
+        },
+        "tmLogoAgg": {
+          "terms": {
+            "field": "tmLogoUrl",
+            "size": 1000
+          }
+        }
+      }
+    },
+    "attrAgg": {
+      "nested": {
+        "path": "attrs"
+      },
+      "aggs": {
+        "attrIdAgg": {
+          "terms": {
+            "field": "attrs.attrId",
+            "size": 1000
+          },
+          "aggs": {
+            "attrNameAgg": {
+              "terms": {
+                "field": "attrs.attrName",
+                "size": 100
+              }
+            },
+            "attrValueAgg": {
+              "terms": {
+                "field": "attrs.attrValue",
+                "size": 100
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
