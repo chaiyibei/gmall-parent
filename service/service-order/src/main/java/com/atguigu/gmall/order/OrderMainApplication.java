@@ -2,12 +2,15 @@ package com.atguigu.gmall.order;
 
 import com.atguigu.gmall.common.annotation.EnableAutoExceptionHandler;
 import com.atguigu.gmall.common.annotation.EnableAutoFeignInterceptor;
+import com.atguigu.gmall.rabbit.annotation.EnableAppRabbit;
 import org.mybatis.spring.annotation.MapperScan;
+import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 import org.springframework.boot.SpringApplication;
 import org.springframework.cloud.client.SpringCloudApplication;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+@EnableAppRabbit
 @EnableTransactionManagement
 @EnableAutoExceptionHandler
 @EnableAutoFeignInterceptor //开启feign，用户id透传拦截器
