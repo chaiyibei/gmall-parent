@@ -5,6 +5,7 @@ public enum ProcessStatus {
     PAID("已支付", OrderStatus.PAID),
     NOTIFIED_WARE("已通知仓储", OrderStatus.PAID),
     WAITING_DELEVER("待发货", OrderStatus.WAITING_DELEVER),
+    WAITING_SCHEDULE("超出库异常",OrderStatus.WAITING_SCHEDULE),
     STOCK_EXCEPTION("库存异常", OrderStatus.PAID),
     DELEVERED("已发货", OrderStatus.DELEVERED),
     CLOSED("已关闭", OrderStatus.CLOSED),

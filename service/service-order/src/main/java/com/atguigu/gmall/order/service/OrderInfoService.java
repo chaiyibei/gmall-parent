@@ -29,4 +29,20 @@ public interface OrderInfoService extends IService<OrderInfo> {
      * @param expected
      */
     void changeOrderStatus(Long orderId, Long userId, ProcessStatus closed, List<ProcessStatus> expected);
+
+    /**
+     * 根据对外交易号和用户id获取订单信息
+     * @param outTradeNo
+     * @param userId
+     * @return
+     */
+    OrderInfo getOrderInfoByOutTradeNoAndUserId(String outTradeNo, Long userId);
+
+    /**
+     * 根据订单id和用户id获取订单信息
+     * @param orderId
+     * @param userId
+     * @return
+     */
+    OrderInfo getOrderInfoByOrderIdAndUserId(Long orderId, Long userId);
 }

@@ -3,8 +3,12 @@ package com.atguigu.gmall.order.service.impl;
 import com.atguigu.gmall.model.order.OrderDetail;
 import com.atguigu.gmall.order.service.OrderDetailService;
 import com.atguigu.gmall.order.mapper.OrderDetailMapper;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
 * @author 柴小贝
@@ -14,7 +18,16 @@ import org.springframework.stereotype.Service;
 @Service
 public class OrderDetailServiceImpl extends ServiceImpl<OrderDetailMapper, OrderDetail>
     implements OrderDetailService{
+    @Autowired
+    OrderDetailMapper orderDetailMapper;
 
+    @Override
+    public List<OrderDetail> getOrderDetails(Long orderId, Long userId) {
+        List<OrderDetail> details = orderDetailMapper.selectList(new LambdaQueryWrapper<OrderDetail>()
+                .eq(OrderDetail::getOrderId, orderId)
+                .eq(OrderDetail::getUserId, userId));
+        return details;
+    }
 }
 
 

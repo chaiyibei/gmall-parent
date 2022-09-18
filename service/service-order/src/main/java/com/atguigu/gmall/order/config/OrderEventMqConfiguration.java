@@ -134,4 +134,44 @@ public class OrderEventMqConfiguration {
                 null
         );
     }
+
+    /**
+     * 支付成功单对列
+     * @return
+     */
+    @Bean
+    public Queue payedQueue(){
+        /**
+         * String name, boolean durable,
+         * boolean durable
+         * boolean exclusive,
+         * boolean autoDelete,
+         * @Nullable Map<String, Object> arguments
+         */
+        return new Queue(
+                MqConst.QUEUE_ORDER_PAYED,
+                true,
+                false,
+                false,
+                null
+        );
+    }
+
+    @Bean
+    public Binding payedQueueBinding(){
+        /**
+         * String destination, 目的地
+         * Binding.DestinationType destinationType, 目的地类型
+         * String exchange, 交换机
+         * String routingKey, 路由键
+         * @Nullable Map<String, Object> arguments
+         */
+        return new Binding(
+                MqConst.QUEUE_ORDER_PAYED,
+                Binding.DestinationType.QUEUE,
+                MqConst.EXCHANGE_ORDER_EVENT,
+                MqConst.RK_ORDER_PAYED,
+                null
+        );
+    }
 }

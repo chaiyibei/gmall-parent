@@ -3,6 +3,7 @@ package com.atguigu.gmall.web.controller;
 import com.atguigu.gmall.common.result.Result;
 import com.atguigu.gmall.feign.order.OrderFeignClient;
 import com.atguigu.gmall.model.vo.order.OrderConfirmDataVo;
+import com.sun.org.apache.bcel.internal.generic.RETURN;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -37,5 +38,13 @@ public class OrderTradeController {
         return "order/trade";
     }
 
+    /**
+     * 订单列表页
+     * @return
+     */
+    @GetMapping("/myOrder.html")
+    public String myOrderHtml(){
+        return "order/myOrder";
+    }
 
 }

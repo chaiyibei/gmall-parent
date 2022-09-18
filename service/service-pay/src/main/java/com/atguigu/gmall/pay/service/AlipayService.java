@@ -18,4 +18,10 @@ public interface AlipayService {
      * @return
      */
     boolean rsaCheckV1(Map<String, String> params) throws AlipayApiException;
+
+    /**
+     * 发送支付成功消息给订单交换机
+     * @param params
+     */
+    void sendPayedMsg(Map<String, String> params);
 }

@@ -65,8 +65,8 @@ public class PayController {
         if (b){
             //验签通过
             log.info("异步通知抵达，支付成功，验签通过，数据：{}", Jsons.toStr(params));
-            // TODO: 2022-9-18 修改订单状态，用到支付宝最大努力通知
-
+            //修改订单状态，用到支付宝最大努力通知
+            alipayService.sendPayedMsg(params);
         }else {
             return "error";
         }
