@@ -46,6 +46,11 @@ spring:
           predicates:
             - Path=/api/payment/**
 
+        - id: service-seckill
+          uri: lb://service-seckill
+          predicates:
+            - Path=/api/activity/**
+
         - id: web-all
           uri: lb://web-all
           predicates:
