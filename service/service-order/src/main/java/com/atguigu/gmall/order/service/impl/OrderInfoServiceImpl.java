@@ -98,6 +98,22 @@ public class OrderInfoServiceImpl extends ServiceImpl<OrderInfoMapper, OrderInfo
         return orderInfo;
     }
 
+    @Override
+    public Long submitSeckillOrder(OrderInfo orderInfo) {
+        //1、保存秒杀单
+        orderInfoMapper.insert(orderInfo);
+        Long id = orderInfo.getId();
+
+        //2、保存明细
+        List<OrderDetail> list = orderInfo.getOrderDetailList();
+        list.stream().forEach(item->{
+            item.setOrderId(id);
+        });
+        orderDetailService.saveBatch(list);
+
+        return id;
+    }
+
     /**
      * 订单明细
      * @param submitVo

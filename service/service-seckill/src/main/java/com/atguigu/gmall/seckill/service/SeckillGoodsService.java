@@ -29,4 +29,10 @@ public interface SeckillGoodsService extends IService<SeckillGoods> {
      * @return
      */
     SeckillGoods getGoodDetail(Long skuId);
+
+    /**
+     * 扣减库存
+     * @param skuId
+     */
+    void deductSeckillGoods(Long skuId);
 }

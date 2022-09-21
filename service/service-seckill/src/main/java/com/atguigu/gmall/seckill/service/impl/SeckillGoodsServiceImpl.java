@@ -46,6 +46,11 @@ public class SeckillGoodsServiceImpl extends ServiceImpl<SeckillGoodsMapper, Sec
         SeckillGoods goods = cacheOpsService.getSeckillGoodsDetail(skuId);
         return goods;
     }
+
+    @Override
+    public void deductSeckillGoods(Long skuId) {
+        seckillGoodsMapper.updateStockCount(skuId);
+    }
 }
 
 

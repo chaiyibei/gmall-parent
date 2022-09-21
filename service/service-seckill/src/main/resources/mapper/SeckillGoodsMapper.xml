@@ -30,6 +30,10 @@
         num,stock_count,sku_desc
     </sql>
 
+    <update id="updateStockCount">
+        update seckill_goods set stock_count = stock_count-1 where sku_id=#{skuId}
+    </update>
+
     <select id="getCurrentDaySeckillGoodsList" resultType="com.atguigu.gmall.model.activity.SeckillGoods">
         SELECT * FROM seckill_goods
         WHERE #{date}
